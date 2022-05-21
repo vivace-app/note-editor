@@ -34,7 +34,7 @@
 | ロングノーツ編集モードを解除する      |   右クリック / Esc    |
 
 ## 開発環境
-Unity 2019.1.5f1
+Unity 2021.3.3f1
 
 ## LICENSE
 [MIT](https://github.com/setchi/NoteEditor/blob/master/LICENSE)
