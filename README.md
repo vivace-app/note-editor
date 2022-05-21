@@ -1,6 +1,6 @@
 # Note Editor [![license](https://img.shields.io/badge/license-MIT-green.svg?style=flat-square)](https://github.com/setchi/NoteEditor/blob/master/LICENSE) [![Release](https://img.shields.io/github/release/setchi/NoteEditor.svg?style=flat-square&logo=github)](https://github.com/setchi/NoteEditor/releases/latest)
 音楽ゲーム用の譜面エディタです。
-現在wav形式の音楽ファイルのみ対応しています。[English](https://translate.google.com/translate?sl=ja&tl=en&u=https://github.com/setchi/NoteEditor) (by Google Translate)
+現在wav形式の音楽ファイルのみ対応しています。
 
 ![screenshot](screenshot.png)
 
@@ -27,11 +27,12 @@
 | コピー対象を張り付ける       |     Ctrl + V     |
 
 ### ノーツ編集モードの操作
-| アクション | コマンド |
-|:-----------|:------------|
-| ノーツ編集モードを切替える | Alt |
-| ロングノーツ編集を開始する      |      Shift + ノーツを配置    |
-| ロングノーツ編集モードを解除する      |   右クリック / Esc    |
+| アクション             | コマンド           |
+|:------------------|:---------------|
+| ロングノーツ編集モードを切替える  | Alt            |
+| ロングノーツ編集を開始する     | Shift + ノーツを配置 |
+| ロングノーツ編集モードを解除する  | 右クリック / Esc    |
+| フリックノーツ編集モードを切替える | Tab            |
 
 ## 開発環境
 Unity 2021.3.3f1

@@ -23,14 +23,53 @@ namespace NoteEditor.GLDrawing
                     noteObj.LateUpdateObservable.OnNext(Unit.Default);
                     var screenPos = ConvertUtils.CanvasToScreenPosition(canvasPosOfNote);
                     var drawSize = 9 / NoteCanvas.ScaleFactor.Value;
-                    GLQuadDrawer.Draw(new Geometry(
-                        new[] {
-                            new Vector3(screenPos.x, screenPos.y - drawSize, 0),
-                            new Vector3(screenPos.x + drawSize, screenPos.y, 0),
-                            new Vector3(screenPos.x, screenPos.y + drawSize, 0),
-                            new Vector3(screenPos.x - drawSize, screenPos.y, 0)
-                        },
-                        noteObj.NoteColor));
+                    switch (noteObj.note.type)
+                    {
+                        case Notes.NoteTypes.LeftwardFlick:
+                            GLQuadDrawer.Draw(new Geometry(
+                                new[]
+                                {
+                                    new Vector3(screenPos.x, screenPos.y + drawSize, 0),
+                                    new Vector3(screenPos.x - drawSize, screenPos.y, 0),
+                                    new Vector3(screenPos.x, screenPos.y - drawSize, 0),
+                                    new Vector3(screenPos.x, screenPos.y - drawSize, 0)
+                                },
+                                noteObj.NoteColor));
+                            break;
+                        case Notes.NoteTypes.RightwardFlick:
+                            GLQuadDrawer.Draw(new Geometry(
+                                new[]
+                                {
+                                    new Vector3(screenPos.x + drawSize, screenPos.y, 0),
+                                    new Vector3(screenPos.x, screenPos.y + drawSize, 0),
+                                    new Vector3(screenPos.x, screenPos.y - drawSize, 0),
+                                    new Vector3(screenPos.x, screenPos.y - drawSize, 0)
+                                },
+                                noteObj.NoteColor));
+                            break;
+                        case Notes.NoteTypes.UpwardFlick:
+                            GLQuadDrawer.Draw(new Geometry(
+                                new[]
+                                {
+                                    new Vector3(screenPos.x + drawSize, screenPos.y, 0),
+                                    new Vector3(screenPos.x, screenPos.y + drawSize, 0),
+                                    new Vector3(screenPos.x - drawSize, screenPos.y, 0),
+                                    new Vector3(screenPos.x - drawSize, screenPos.y, 0)
+                                },
+                                noteObj.NoteColor));
+                            break;
+                        default:
+                            GLQuadDrawer.Draw(new Geometry(
+                                new[]
+                                {
+                                    new Vector3(screenPos.x, screenPos.y - drawSize, 0),
+                                    new Vector3(screenPos.x + drawSize, screenPos.y, 0),
+                                    new Vector3(screenPos.x, screenPos.y + drawSize, 0),
+                                    new Vector3(screenPos.x - drawSize, screenPos.y, 0)
+                                },
+                                noteObj.NoteColor));
+                            break;
+                    }
 
                     if (noteObj.note.type == Notes.NoteTypes.Long && EditData.Notes.ContainsKey(noteObj.note.prev))
                     {

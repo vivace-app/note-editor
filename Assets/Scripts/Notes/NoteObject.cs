@@ -15,12 +15,18 @@ namespace NoteEditor.Notes
         public ReactiveProperty<bool> isSelected = new ReactiveProperty<bool>();
         public Subject<Unit> LateUpdateObservable = new Subject<Unit>();
         public Subject<Unit> OnClickObservable = new Subject<Unit>();
-        public Color NoteColor { get { return noteColor_.Value; } }
+
+        public Color NoteColor
+        {
+            get { return noteColor_.Value; }
+        }
+
         ReactiveProperty<Color> noteColor_ = new ReactiveProperty<Color>();
 
         Color selectedStateColor = new Color(255 / 255f, 0 / 255f, 255 / 255f);
         Color singleNoteColor = new Color(175 / 255f, 255 / 255f, 78 / 255f);
         Color longNoteColor = new Color(0 / 255f, 255 / 255f, 255 / 255f);
+        Color flickNoteColor = new Color(255 / 255f, 51 / 255f, 153 / 255f);
         Color invalidStateColor = new Color(255 / 255f, 0 / 255f, 0 / 255f);
 
         ReactiveProperty<NoteTypes> noteType = new ReactiveProperty<NoteTypes>();
@@ -40,8 +46,15 @@ namespace NoteEditor.Notes
 
             disposable.Add(noteType.Where(_ => !isSelected.Value)
                 .Merge(isSelected.Select(_ => noteType.Value))
-                .Select(type => type == NoteTypes.Long)
-                .Subscribe(isLongNote => noteColor_.Value = isLongNote ? longNoteColor : singleNoteColor));
+                .Subscribe(_ => noteColor_.Value = noteType.Value switch
+                {
+                    NoteTypes.Single => singleNoteColor,
+                    NoteTypes.Long => longNoteColor,
+                    NoteTypes.LeftwardFlick => flickNoteColor,
+                    NoteTypes.RightwardFlick => flickNoteColor,
+                    NoteTypes.UpwardFlick => flickNoteColor,
+                    _ => throw new ArgumentOutOfRangeException()
+                }));
 
             disposable.Add(isSelected.Where(selected => selected)
                 .Subscribe(_ => noteColor_.Value = selectedStateColor));
@@ -50,7 +63,7 @@ namespace NoteEditor.Notes
                 .Select(_ => EditState.NoteType.Value)
                 .Where(_ => NoteCanvas.ClosestNotePosition.Value.Equals(note.position));
 
-            disposable.Add(mouseDownObservable.Where(editType => editType == NoteTypes.Single)
+            disposable.Add(mouseDownObservable.Where(editType => editType != NoteTypes.Long)
                 .Where(editType => editType == noteType.Value)
                 .Subscribe(_ => editPresenter.RequestForRemoveNote.OnNext(note)));
 
@@ -58,7 +71,8 @@ namespace NoteEditor.Notes
                 .Where(editType => editType == noteType.Value)
                 .Subscribe(_ =>
                 {
-                    if (EditData.Notes.ContainsKey(EditState.LongNoteTailPosition.Value) && note.prev.Equals(NotePosition.None))
+                    if (EditData.Notes.ContainsKey(EditState.LongNoteTailPosition.Value) &&
+                        note.prev.Equals(NotePosition.None))
                     {
                         var currentTailNote = new Note(EditData.Notes[EditState.LongNoteTailPosition.Value].note);
                         currentTailNote.next = note.position;
@@ -73,7 +87,8 @@ namespace NoteEditor.Notes
                         if (EditData.Notes.ContainsKey(note.prev) && !EditData.Notes.ContainsKey(note.next))
                             EditState.LongNoteTailPosition.Value = note.prev;
 
-                        editPresenter.RequestForRemoveNote.OnNext(new Note(note.position, EditState.NoteType.Value, note.next, note.prev));
+                        editPresenter.RequestForRemoveNote.OnNext(new Note(note.position, EditState.NoteType.Value,
+                            note.next, note.prev));
                         RemoveLink();
                     }
                 }));
@@ -91,8 +106,10 @@ namespace NoteEditor.Notes
                 .Select(nextPosition => new Line(
                     ConvertUtils.CanvasToScreenPosition(ConvertUtils.NoteToCanvasPosition(note.position)),
                     ConvertUtils.CanvasToScreenPosition(nextPosition),
-                    isSelected.Value || EditData.Notes.ContainsKey(note.next) && EditData.Notes[note.next].isSelected.Value ? selectedStateColor
-                        : 0 < nextPosition.x - ConvertUtils.NoteToCanvasPosition(note.position).x ? longNoteColor : invalidStateColor))
+                    isSelected.Value || EditData.Notes.ContainsKey(note.next) &&
+                    EditData.Notes[note.next].isSelected.Value ? selectedStateColor
+                    : 0 < nextPosition.x - ConvertUtils.NoteToCanvasPosition(note.position).x ? longNoteColor
+                    : invalidStateColor))
                 .Subscribe(line => GLLineDrawer.Draw(line)));
         }
 
@@ -116,7 +133,7 @@ namespace NoteEditor.Notes
 
         public void SetState(Note note)
         {
-            if (note.type == NoteTypes.Single)
+            if (note.type != NoteTypes.Long)
             {
                 RemoveLink();
             }

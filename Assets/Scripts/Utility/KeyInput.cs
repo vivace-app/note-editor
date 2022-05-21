@@ -55,6 +55,16 @@ namespace NoteEditor.Utility
                 Input.GetKeyDown(KeyCode.RightCommand);
         }
 
+        public static bool TabKey()
+        {
+            return Input.GetKey(KeyCode.Tab);
+        }
+        
+        public static bool TabKeyDown()
+        {
+            return Input.GetKeyDown(KeyCode.Tab);
+        }
+
         public static KeyCode FetchKey()
         {
             int e = System.Enum.GetNames(typeof(KeyCode)).Length;

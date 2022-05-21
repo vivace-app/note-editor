@@ -32,7 +32,7 @@ namespace NoteEditor.Presenter
                 .Where(_ => 0 <= NoteCanvas.ClosestNotePosition.Value.num);
 
             closestNoteAreaOnMouseDownObservable
-                .Where(_ => EditState.NoteType.Value == NoteTypes.Single)
+                .Where(_ => EditState.NoteType.Value != NoteTypes.Long)
                 .Where(_ => !KeyInput.ShiftKey())
                 .Merge(closestNoteAreaOnMouseDownObservable
                     .Where(_ => EditState.NoteType.Value == NoteTypes.Long))
@@ -40,7 +40,7 @@ namespace NoteEditor.Presenter
                 {
                     if (EditData.Notes.ContainsKey(NoteCanvas.ClosestNotePosition.Value))
                     {
-                        EditData.Notes[NoteCanvas.ClosestNotePosition.Value].OnClickObservable.OnNext(Unit.Default);
+                        // EditData.Notes[NoteCanvas.ClosestNotePosition.Value].OnClickObservable.OnNext(Unit.Default);
                     }
                     else
                     {
@@ -103,14 +103,7 @@ namespace NoteEditor.Presenter
 
             RequestForEditNote.Subscribe(note =>
             {
-                if (note.type == NoteTypes.Single)
-                {
-                    (EditData.Notes.ContainsKey(note.position)
-                        ? RequestForRemoveNote
-                        : RequestForAddNote)
-                    .OnNext(note);
-                }
-                else if (note.type == NoteTypes.Long)
+                if (note.type == NoteTypes.Long)
                 {
                     if (!EditData.Notes.ContainsKey(note.position))
                     {
@@ -123,6 +116,13 @@ namespace NoteEditor.Presenter
                         ? RequestForRemoveNote
                         : RequestForChangeNoteStatus)
                     .OnNext(noteObject.note);
+                }
+                else
+                {
+                    (EditData.Notes.ContainsKey(note.position)
+                            ? RequestForRemoveNote
+                            : RequestForAddNote)
+                        .OnNext(note);
                 }
             });
         }

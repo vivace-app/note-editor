@@ -1,4 +1,5 @@
-﻿using NoteEditor.DTO;
+﻿using System;
+using NoteEditor.DTO;
 using NoteEditor.Notes;
 using NoteEditor.Presenter;
 using System.Collections.Generic;
@@ -25,23 +26,31 @@ namespace NoteEditor.Model
 
             foreach (var noteObject in sortedNoteObjects)
             {
-                if (noteObject.note.type == NoteTypes.Single)
+                switch (noteObject.note.type)
                 {
-                    dto.notes.Add(ToDTO(noteObject));
-                }
-                else if (noteObject.note.type == NoteTypes.Long)
-                {
-                    var current = noteObject;
-                    var note = ToDTO(noteObject);
-
-                    while (EditData.Notes.ContainsKey(current.note.next))
+                    case NoteTypes.Single:
+                    case NoteTypes.LeftwardFlick:
+                    case NoteTypes.RightwardFlick:
+                    case NoteTypes.UpwardFlick:
+                        dto.notes.Add(ToDTO(noteObject));
+                        break;
+                    case NoteTypes.Long:
                     {
-                        var nextObj = EditData.Notes[current.note.next];
-                        note.notes.Add(ToDTO(nextObj));
-                        current = nextObj;
-                    }
+                        var current = noteObject;
+                        var note = ToDTO(noteObject);
 
-                    dto.notes.Add(note);
+                        while (EditData.Notes.ContainsKey(current.note.next))
+                        {
+                            var nextObj = EditData.Notes[current.note.next];
+                            note.notes.Add(ToDTO(nextObj));
+                            current = nextObj;
+                        }
+
+                        dto.notes.Add(note);
+                        break;
+                    }
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
             }
 
@@ -59,7 +68,7 @@ namespace NoteEditor.Model
 
             foreach (var note in editData.notes)
             {
-                if (note.type == 1)
+                if (note.type != 2)
                 {
                     notePresenter.AddNote(ToNoteObject(note));
                     continue;
@@ -89,7 +98,15 @@ namespace NoteEditor.Model
             note.num = noteObject.note.position.num;
             note.block = noteObject.note.position.block;
             note.LPB = noteObject.note.position.LPB;
-            note.type = noteObject.note.type == NoteTypes.Long ? 2 : 1;
+            note.type = noteObject.note.type switch
+            {
+                NoteTypes.Single => 1,
+                NoteTypes.Long => 2,
+                NoteTypes.LeftwardFlick => 3,
+                NoteTypes.RightwardFlick => 4,
+                NoteTypes.UpwardFlick => 5,
+                _ => throw new ArgumentOutOfRangeException()
+            };
             note.notes = new List<MusicDTO.Note>();
             return note;
         }
@@ -98,7 +115,15 @@ namespace NoteEditor.Model
         {
             return new Note(
                 new NotePosition(musicNote.LPB, musicNote.num, musicNote.block),
-                musicNote.type == 1 ? NoteTypes.Single : NoteTypes.Long);
+                musicNote.type switch
+                {
+                    1 => NoteTypes.Single,
+                    2 => NoteTypes.Long,
+                    3 => NoteTypes.LeftwardFlick,
+                    4 => NoteTypes.RightwardFlick,
+                    5 => NoteTypes.UpwardFlick,
+                    _ => throw new ArgumentOutOfRangeException()
+                });
         }
     }
 }
