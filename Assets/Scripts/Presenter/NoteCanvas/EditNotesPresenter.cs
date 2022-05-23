@@ -40,7 +40,7 @@ namespace NoteEditor.Presenter
                 {
                     if (EditData.Notes.ContainsKey(NoteCanvas.ClosestNotePosition.Value))
                     {
-                        // EditData.Notes[NoteCanvas.ClosestNotePosition.Value].OnClickObservable.OnNext(Unit.Default);
+                        EditData.Notes[NoteCanvas.ClosestNotePosition.Value].OnClickObservable.OnNext(Unit.Default);
                     }
                     else
                     {

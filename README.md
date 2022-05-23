@@ -1,8 +1,12 @@
-# Note Editor [![license](https://img.shields.io/badge/license-MIT-green.svg?style=flat-square)](https://github.com/setchi/NoteEditor/blob/master/LICENSE) [![Release](https://img.shields.io/github/release/setchi/NoteEditor.svg?style=flat-square&logo=github)](https://github.com/setchi/NoteEditor/releases/latest)
-音楽ゲーム用の譜面エディタです。
-現在wav形式の音楽ファイルのみ対応しています。
+# note-editor [![license](https://img.shields.io/badge/license-MIT-green.svg?style=flat-square)](https://github.com/vivace-app/note-editor/blob/main/LICENSE) [![Release](https://img.shields.io/github/release/vivace-app/note-editor.svg?style=flat-square&logo=github)](https://github.com/vivace-app/note-editor/releases/latest)
+音楽ゲーム [VIVACE](https://github.com/vivace-app/vivace) 用の譜面エディタです。
 
-![screenshot](screenshot.png)
+[こちら](https://github.com/setchi/NoteEditor) のオープンソースを活用させていただき開発しました。
+
+![screenshot](screenshot.jpg)
+
+## 使用できる音源
+現在wav形式の音楽ファイルのみ対応しています。
 
 ## コマンド一覧
 ### 一般的なコマンド
@@ -38,4 +42,4 @@
 Unity 2021.3.3f1
 
 ## LICENSE
-[MIT](https://github.com/setchi/NoteEditor/blob/master/LICENSE)
+[MIT](https://github.com/vivace-app/note-editor/blob/main/LICENSE)
