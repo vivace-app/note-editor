@@ -29,8 +29,6 @@ namespace NoteEditor.Model
                 switch (noteObject.note.type)
                 {
                     case NoteTypes.Single:
-                    case NoteTypes.LeftwardFlick:
-                    case NoteTypes.RightwardFlick:
                     case NoteTypes.UpwardFlick:
                         dto.notes.Add(ToDTO(noteObject));
                         break;
@@ -102,9 +100,7 @@ namespace NoteEditor.Model
             {
                 NoteTypes.Single => 1,
                 NoteTypes.Long => 2,
-                NoteTypes.LeftwardFlick => 3,
-                NoteTypes.RightwardFlick => 4,
-                NoteTypes.UpwardFlick => 5,
+                NoteTypes.UpwardFlick => 3,
                 _ => throw new ArgumentOutOfRangeException()
             };
             note.notes = new List<MusicDTO.Note>();
@@ -119,9 +115,7 @@ namespace NoteEditor.Model
                 {
                     1 => NoteTypes.Single,
                     2 => NoteTypes.Long,
-                    3 => NoteTypes.LeftwardFlick,
-                    4 => NoteTypes.RightwardFlick,
-                    5 => NoteTypes.UpwardFlick,
+                    3 => NoteTypes.UpwardFlick,
                     _ => throw new ArgumentOutOfRangeException()
                 });
         }

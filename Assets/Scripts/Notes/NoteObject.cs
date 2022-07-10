@@ -50,8 +50,6 @@ namespace NoteEditor.Notes
                 {
                     NoteTypes.Single => singleNoteColor,
                     NoteTypes.Long => longNoteColor,
-                    NoteTypes.LeftwardFlick => flickNoteColor,
-                    NoteTypes.RightwardFlick => flickNoteColor,
                     NoteTypes.UpwardFlick => flickNoteColor,
                     _ => throw new ArgumentOutOfRangeException()
                 }));

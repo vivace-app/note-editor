@@ -16,8 +16,6 @@ namespace NoteEditor.Presenter
         [SerializeField] Sprite iconLongNotes = default;
         [SerializeField] Sprite iconSingleNotes = default;
         [SerializeField] Sprite iconArrowDefault = default;
-        [SerializeField] Sprite iconArrowLeftward = default;
-        [SerializeField] Sprite iconArrowRightward = default;
         [SerializeField] Sprite iconArrowUpward = default;
         [SerializeField] Color longTypeStateButtonColor = default;
         [SerializeField] Color singleTypeStateButtonColor = default;
@@ -53,9 +51,7 @@ namespace NoteEditor.Presenter
                         {
                             NoteTypes.Single => NoteTypes.UpwardFlick,
                             NoteTypes.Long => NoteTypes.UpwardFlick,
-                            NoteTypes.LeftwardFlick => NoteTypes.Single,
-                            NoteTypes.RightwardFlick => NoteTypes.LeftwardFlick,
-                            NoteTypes.UpwardFlick => NoteTypes.RightwardFlick,
+                            NoteTypes.UpwardFlick => NoteTypes.Single,
                             _ => throw new ArgumentOutOfRangeException()
                         })
                     .Subscribe(editType => EditState.NoteType.Value = editType);
@@ -74,14 +70,6 @@ namespace NoteEditor.Presenter
                             case NoteTypes.Long:
                                 flickNoteButtonImage.sprite = iconArrowDefault;
                                 flickNoteButtonImage.color = singleTypeStateButtonColor;
-                                break;
-                            case NoteTypes.LeftwardFlick:
-                                flickNoteButtonImage.sprite = iconArrowLeftward;
-                                flickNoteButtonImage.color = longTypeStateButtonColor;
-                                break;
-                            case NoteTypes.RightwardFlick:
-                                flickNoteButtonImage.sprite = iconArrowRightward;
-                                flickNoteButtonImage.color = longTypeStateButtonColor;
                                 break;
                             case NoteTypes.UpwardFlick:
                                 flickNoteButtonImage.sprite = iconArrowUpward;

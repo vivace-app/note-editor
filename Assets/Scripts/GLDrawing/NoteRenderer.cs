@@ -1,4 +1,5 @@
 ﻿using NoteEditor.Model;
+using NoteEditor.Notes;
 using NoteEditor.Utility;
 using UniRx;
 using UnityEngine;
@@ -25,28 +26,6 @@ namespace NoteEditor.GLDrawing
                     var drawSize = 9 / NoteCanvas.ScaleFactor.Value;
                     switch (noteObj.note.type)
                     {
-                        case Notes.NoteTypes.LeftwardFlick:
-                            GLQuadDrawer.Draw(new Geometry(
-                                new[]
-                                {
-                                    new Vector3(screenPos.x, screenPos.y + drawSize, 0),
-                                    new Vector3(screenPos.x - drawSize, screenPos.y, 0),
-                                    new Vector3(screenPos.x, screenPos.y - drawSize, 0),
-                                    new Vector3(screenPos.x, screenPos.y - drawSize, 0)
-                                },
-                                noteObj.NoteColor));
-                            break;
-                        case Notes.NoteTypes.RightwardFlick:
-                            GLQuadDrawer.Draw(new Geometry(
-                                new[]
-                                {
-                                    new Vector3(screenPos.x + drawSize, screenPos.y, 0),
-                                    new Vector3(screenPos.x, screenPos.y + drawSize, 0),
-                                    new Vector3(screenPos.x, screenPos.y - drawSize, 0),
-                                    new Vector3(screenPos.x, screenPos.y - drawSize, 0)
-                                },
-                                noteObj.NoteColor));
-                            break;
                         case Notes.NoteTypes.UpwardFlick:
                             GLQuadDrawer.Draw(new Geometry(
                                 new[]
@@ -58,6 +37,8 @@ namespace NoteEditor.GLDrawing
                                 },
                                 noteObj.NoteColor));
                             break;
+                        case NoteTypes.Single:
+                        case NoteTypes.Long:
                         default:
                             GLQuadDrawer.Draw(new Geometry(
                                 new[]
